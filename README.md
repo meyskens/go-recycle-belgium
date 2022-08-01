@@ -5,7 +5,7 @@ There is however no official/open API for this. This project aims to provide a G
 
 ## What is `x-secret`?
 
-This is a random string that is needed to get an auth token for some reasons... Just aim your webbrowser inspection tool at https://recycleapp.be/home and look for `https://api.fostplus.be/recycle-public/app/v1/access-token`, it's not as secret as it's name might suggest.
+This is a random string that is needed to get an auth token for some reasons... Just aim your webbrowser inspection tool at https://recycleapp.be/home and look for `https://api.fostplus.be/recycle-public/app/v1/access-token`, its not as secret as it's name might suggest.
 
 ## Example use
 

@@ -3,7 +3,7 @@ package recyclebelgium
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -66,7 +66,7 @@ func (a *API) GetZipCodes(zipcode string) (ZipResponse, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		b, _ := ioutil.ReadAll(resp.Body)
+		b, _ := io.ReadAll(resp.Body)
 		return ZipResponse{}, fmt.Errorf("got a %d error: %s", resp.StatusCode, string(b))
 	}
 
@@ -153,7 +153,7 @@ func (a *API) GetStreets(zipcodeID string, street string) (StreetResponse, error
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		b, _ := ioutil.ReadAll(resp.Body)
+		b, _ := io.ReadAll(resp.Body)
 		return StreetResponse{}, fmt.Errorf("got a %d error: %s", resp.StatusCode, string(b))
 	}
 

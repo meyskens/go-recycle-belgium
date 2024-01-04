@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -68,7 +69,7 @@ func (a *API) GetCollections(zipcodeID, streetID, houseNumber string, from, unti
 		return CollectionsResponse{}, fmt.Errorf("error getting auth token: %w", err)
 	}
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.fostplus.be/recycle-public/app/v1/collections?zipcodeId=%s&streetId=%s&houseNumber=%s&fromDate=%s&untilDate=%s&size=%d", zipcodeID, streetID, houseNumber, from.Format("2006-01-02"), until.Format("2006-01-02"), size), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.fostplus.be/recycle-public/app/v1/collections?zipcodeId=%s&streetId=%s&houseNumber=%s&fromDate=%s&untilDate=%s&size=%d", zipcodeID, streetID, url.QueryEscape(houseNumber), from.Format("2006-01-02"), until.Format("2006-01-02"), size), nil)
 	if err != nil {
 		return CollectionsResponse{}, fmt.Errorf("error creating request: %w", err)
 	}

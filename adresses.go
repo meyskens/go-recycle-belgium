@@ -3,8 +3,9 @@ package recyclebelgium
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -51,7 +52,7 @@ func (a *API) GetZipCodes(zipcode string) (ZipResponse, error) {
 		return ZipResponse{}, fmt.Errorf("error getting auth token: %w", err)
 	}
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.fostplus.be/recycle-public/app/v1/zipcodes?q=%s", zipcode), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.fostplus.be/recycle-public/app/v1/zipcodes?q=%s", url.QueryEscape(zipcode)), nil)
 	if err != nil {
 		return ZipResponse{}, fmt.Errorf("error creating request: %w", err)
 	}
@@ -66,7 +67,7 @@ func (a *API) GetZipCodes(zipcode string) (ZipResponse, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		b, _ := ioutil.ReadAll(resp.Body)
+		b, _ := io.ReadAll(resp.Body)
 		return ZipResponse{}, fmt.Errorf("got a %d error: %s", resp.StatusCode, string(b))
 	}
 
@@ -137,7 +138,7 @@ func (a *API) GetStreets(zipcodeID string, street string) (StreetResponse, error
 	}
 
 	// for reasons unknown this is a POST api with GET parameters
-	req, err := http.NewRequest("POST", fmt.Sprintf("https://api.fostplus.be/recycle-public/app/v1/streets?q=%s&zipcodes=%s", street, zipcodeID), strings.NewReader("{}"))
+	req, err := http.NewRequest("POST", fmt.Sprintf("https://api.fostplus.be/recycle-public/app/v1/streets?q=%s&zipcodes=%s", url.QueryEscape(street), zipcodeID), strings.NewReader("{}"))
 	if err != nil {
 		return StreetResponse{}, fmt.Errorf("error creating request: %w", err)
 	}
@@ -153,7 +154,7 @@ func (a *API) GetStreets(zipcodeID string, street string) (StreetResponse, error
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		b, _ := ioutil.ReadAll(resp.Body)
+		b, _ := io.ReadAll(resp.Body)
 		return StreetResponse{}, fmt.Errorf("got a %d error: %s", resp.StatusCode, string(b))
 	}
 
